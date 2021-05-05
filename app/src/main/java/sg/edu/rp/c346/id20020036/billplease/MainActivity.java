@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     RadioGroup rgPayBy;
     Button btnSplit;
     Button btnReset;
+    TextView tvTotal;
+    TextView tvBill;
 
 
     @Override
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         tvAmount = findViewById(R.id.TextViewAmount);
-        etAmount = findViewById(R.id.editTextNumberDecimal);
+        etAmount = findViewById(R.id.editTextAmount);
         tvPax = findViewById(R.id.textViewPax);
         etPax = findViewById(R.id.editTextNumber);
         tBtnSVS = findViewById(R.id.toggleButtonSVS);
@@ -41,14 +43,43 @@ public class MainActivity extends AppCompatActivity {
         rgPayBy = findViewById(R.id.RadioGroupPayBy);
         btnSplit = findViewById(R.id.buttonSplit);
         btnReset = findViewById(R.id.buttonReset);
+        tvTotal = findViewById(R.id.textViewTotal);
+        tvBill = findViewById(R.id.textViewBill);
 
         btnSplit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                double amount = etAmount.
+                if (etAmount.getText().toString().trim().length() != 0 && etPax.getText().toString().trim().length() != 0) {
+                    Double amount = Double.parseDouble(etAmount.getText().toString());
+                    Double newAmount = 0.0;
+                    if (tBtnSVS.isChecked() == false && tBtnGST.isChecked() == false) {
+                        newAmount = amount;
+                    } else if (tBtnSVS.isChecked() == false && tBtnGST.isChecked() == true) {
+                        newAmount = amount + (amount * 0.07);
+                    } else if (tBtnSVS.isChecked() == true && tBtnGST.isChecked() == false) {
+                        newAmount = amount + (amount * 1.10);
+                    } else if (tBtnSVS.isChecked() == true && tBtnGST.isChecked() == true) {
+                        newAmount = amount + (amount * 1.17);
+                    }
 
-                double total = (etAmount - ((etAmount / 100) * etDiscount));
-                double eachPays = (total / etPax)
+                }
+
+                String mode
+
+
+            }
+        });
+
+        btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etAmount.setText("");
+                etDiscount.setText("");
+                etPax.setText("");
+                tBtnGST.setChecked(false);
+                tBtnSVS.setChecked(false);
+                tvTotal.setText("");
+                tvBill.setText("");
             }
         });
     }
