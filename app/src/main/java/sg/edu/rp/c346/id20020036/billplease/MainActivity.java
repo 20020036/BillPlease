@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity {
@@ -49,9 +50,11 @@ public class MainActivity extends AppCompatActivity {
         btnSplit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Double newAmount = 0.0;
                 if (etAmount.getText().toString().trim().length() != 0 && etPax.getText().toString().trim().length() != 0) {
                     Double amount = Double.parseDouble(etAmount.getText().toString());
-                    Double newAmount = 0.0;
+
                     if (tBtnSVS.isChecked() == false && tBtnGST.isChecked() == false) {
                         newAmount = amount;
                     } else if (tBtnSVS.isChecked() == false && tBtnGST.isChecked() == true) {
@@ -64,7 +67,31 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
-                String mode
+                else
+                {
+                    Toast.makeText(MainActivity.this,"Please enter details!", Toast.LENGTH_LONG).show();
+                }
+
+                int pax = Integer.parseInt(etPax.getText().toString());
+
+                if(etDiscount.getText().toString().trim().length()!=0)
+                {
+                    Double percentage = (Double.parseDouble(etDiscount.getText().toString()) / 100);
+                    Double aftDiscount = newAmount * (1 - percentage);
+                    Double eachAmount = aftDiscount / pax;
+                    String totalbill = String.format("%.2f", aftDiscount);
+                    String eachpays = String.format("%.2f", eachAmount);
+                    if(rgPayBy.getCheckedRadioButtonId() == R.id.radioButtonCash)
+                    {
+                        tvTotal.setText("Total Bill: $" + totalbill);
+                        tvBill.setText("Each Pays: $" + eachpays);
+                    }
+                    else
+                    {
+                        tvTotal.setText("Total Bill: $" + totalbill);
+                        tvBill.setText("Each Pays: $" + eachpays + " via PayNow to 912345678");
+                    }
+                }
 
 
             }
